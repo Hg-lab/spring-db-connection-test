@@ -1,0 +1,19 @@
+spring:
+  datasource-first:
+    jdbc-url: jdbc:h2:tcp://localhost/~/h2-db/first-connection
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  datasource-second:
+    jdbc-url: jdbc:h2:tcp://localhost/~/h2-db/second-connection
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: DEBUG
