@@ -23,6 +23,8 @@ public class Service {
             firstRepository.update(first.getName() + "New", first.getId());
             Member second = secondRepository.findAll();
             secondRepository.update(second.getName()+"New", second.getId());
+
+            firstRepository.update(first.getName() + "New2", first.getId());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

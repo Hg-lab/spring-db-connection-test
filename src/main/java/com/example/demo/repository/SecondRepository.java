@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.domain.Member;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
@@ -10,12 +11,15 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Repository
 public class SecondRepository {
     private HikariDataSource dataSource;
+    private FirstRepository firstRepository;
 
-    public SecondRepository(@Qualifier("secondDataSource") HikariDataSource dataSource) {
+    public SecondRepository(@Qualifier("secondDataSource") HikariDataSource dataSource, FirstRepository firstRepository) {
         this.dataSource = dataSource;
+        this.firstRepository = firstRepository;
     }
 
     public Member findAll() {
@@ -28,6 +32,7 @@ public class SecondRepository {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
+            Thread.sleep(1000);
             if (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -35,9 +40,10 @@ public class SecondRepository {
             } else {
                 throw new NoSuchElementException();
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
+            log.info("Second - findAll completed!");
             close(con, pstmt, rs);
         }
     }
@@ -63,6 +69,7 @@ public class SecondRepository {
             con.rollback();
             throw new SQLException(e);
         } finally {
+            log.info("Second - update completed!");
             close(con, pstmt, null);
         }
     }
